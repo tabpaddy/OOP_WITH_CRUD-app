@@ -1,9 +1,31 @@
+  //function for pagination
+  //to perforom dynamic data
+  function pagination(totalpages, currentpages){
+    var pagelist="";
+    if(totalpages>1){
+        currentpages=parseInt(currentpages);//tp parse it in interger format
+        pagelist+='<ul class="pagination justify-content-center">';
+        const prevClass=currentpages==1?"disabled":"";
+        pagelist+=`<li class="page-item ${prevClass}"><a class="page-link" href="#" data-page="${currentpages-1}">Previous</a></li>`;
+        for (let p = 1; p <= totalpages; p++) {
+            const activeClass=currentpages==p?"active":"";
+            pagelist+=`<li class="page-item ${activeClass}"><a class="page-link" href="#" data-page="${p}">${p}</a></li>`;
+            
+        }
+        
+        const nextClass=currentpages==totalpages?"disabled":"";
+        pagelist+=`<li class="page-item ${nextClass}"><a class="page-link" href="#" data-page="${currentpages+1}">Next</a></li>`;
+        pagelist+='</ul>';
+    }
+    $("#pagination").html(pagelist);
+  }
+  
   //function to get users from database
   function getuserrow(user){
     var userRow="";
     if (user) {
         userRow=`<tr>
-        <td scope="row"><img src="include/uploads/${user.photo}" style="width: 100px; height: 100px; object-fit: contain;"></td>
+        <td scope="row"><img src="include/uploads/${user.photo}" style="width: 70px; height: 70px; object-fit: contain;"></td>
         <td>${user.name}</td>
         <td>${user.email}</td>
         <td>${user.mobilenum}</td>
@@ -31,34 +53,44 @@
      beforeSend: function() {
          console.log("Wait....Data is loading");
      },
-     success: function(row) {
-        console.log(row); // Log the response to inspect its structure
+    //  success: function(row) {
+    //     console.log(row); // Log the response to inspect its structure
         
-        if (Array.isArray(row) && row.length > 0) {
-            var usersList = "";
-            row.forEach(function(user) {
-                usersList += getuserrow(user);
-            });
-            $("#usertable tbody").html(usersList); // Update the table body with generated HTML
-        } else {
-            console.log("No users found or invalid response format:", row);
-            // Display a message indicating no users were found
-            $("#usertable tbody").html("<tr><td colspan='5'>No users found.</td></tr>");
-        }
-    },
+    //     if (Array.isArray(row) && row.length > 0) {
+    //         var usersList = "";
+    //         row.forEach(function(user) {
+    //             usersList += getuserrow(user);
+    //         });
+    //         $("#usertable tbody").html(usersList); // Update the table body with generated HTML
+    //         let totaluser=row.count;
+    //     } else {
+    //         console.log("No users found or invalid response format:", row);
+    //         // Display a message indicating no users were found
+    //         $("#usertable tbody").html("<tr><td colspan='5'>No users found.</td></tr>");
+    //     }
+    // },
      
     
-    //  success: function(row) {
-    //     console.log(row);
-    //     if (row.players) {
-    //         var usersList="";
-    //         $.each(row.players,function(index, user){
-    //             usersList+=getuserrow(user);
-    //         });
-    //         $("#usertable tbody").html(usersList);
-    //     }
+     success: function(row) {
+        console.log(row);
+        if (row.users) {
+            var usersList="";
+            $.each(row.users,function(index, users){
+                usersList+=getuserrow(users);
+            });
+            $("#usertable tbody").html(usersList);
+            let totaluser = row.count;
+            // console.log(totaluser);
+            let totalpages= Math.ceil(parseInt(totaluser)/4);
+            const currentpage = $('#currentpage').val();
+            pagination(totalpages, currentpage)
+        } else {
+                    console.log("No users found or invalid response format:", row);
+                    // Display a message indicating no users were found
+                    $("#usertable tbody").html("<tr><td colspan='5'>No users found.</td></tr>");
+                }
 
-    //  },
+     },
      error: function(xhr, status, error) {
          console.log("Error occurred:");
          console.log(xhr.responseText); // Log the full response for debugging
@@ -108,6 +140,74 @@ $(document).ready(function() {
         });
         
     });
+
+    //onclick event for pagination
+    $(document).on("click", "ul.pagination li a", function(event){
+        event.preventDefault();
+
+
+        const pagenum=$(this).data("page");
+        $("#currentpage").val(pagenum);
+        getusers();
+        $(this).parent().siblings().removeClass("active");
+        $(this).parent().addClass("active");
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // //get users function

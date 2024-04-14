@@ -128,7 +128,36 @@ class User extends database{
     }
 
 
-    // function
+    // function to update
+    public function update($data, $id){
+        //dunamic data
+        if(!empty($data)){
+            $fields="";
+            $x=1;
+            $fieldsCount=Count($data);
+            foreach ($data as $field => $value) {
+                # code...
+                $fields.="{$field}=:{$field}";
+                if($x<$fieldsCount){
+                    $fields.=",";                
+                }
+                $x++;// to update
+            }
+        }
+        //staiic
+        $sql= "UPDATE {$this->tablename} SET {$fields} where id = :id";
+        $stmt = $this->conn->prepare($sql);
+        try{
+            $this->conn->beginTransaction();
+            $data['id']=$id;
+            $stmt->execute($data);
+            $this->conn->commit();//just saying this changes are done by me
+            
+        }catch(PDOException $e){
+            echo "Error:".$e->getMessage();
+            $this->conn->rollBack();
+        }
+    }
 
 }
 ?>
