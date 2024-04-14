@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
+    <!-- <tr>
       <td scope="row">pic1</td>
       <td>Mark</td>
       <td>Otto@gmail.com</td>
@@ -19,6 +19,6 @@
        <a href="#" class="me-3 edituser"><i class="uil uil-edit-alt text-success" title="Edit" data-bs-target="#usermodal" data-bs-toggle="modal"></i></a>
        <a href="#" class="me-3 deleteuser"><i class="uil uil-trash text-danger" title="Delete"></i></a>
       </td>
-    </tr>
+    </tr> -->
   </tbody>
 </table>

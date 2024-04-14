@@ -1,9 +1,10 @@
-  //function to get users from database
+
+//function to get users from database
   function getuserrow(user){
     var userRow="";
     if (user) {
         userRow=`<tr>
-        <td scope="row"><img src="include/uploads/${user.photo}" style="width: 100px; height: 100px; object-fit: contain;"></td>
+        <td scope="row"><img src=${user.photo}></td>
         <td>${user.name}</td>
         <td>${user.email}</td>
         <td>${user.mobilenum}</td>
@@ -32,33 +33,16 @@
          console.log("Wait....Data is loading");
      },
      success: function(row) {
-        console.log(row); // Log the response to inspect its structure
-        
-        if (Array.isArray(row) && row.length > 0) {
-            var usersList = "";
-            row.forEach(function(user) {
-                usersList += getuserrow(user);
+        console.log(row);
+        if (row.players) {
+            var usersList="";
+            $.each(row.players,function(index, user){
+                usersList+=getuserrow(user);
             });
-            $("#usertable tbody").html(usersList); // Update the table body with generated HTML
-        } else {
-            console.log("No users found or invalid response format:", row);
-            // Display a message indicating no users were found
-            $("#usertable tbody").html("<tr><td colspan='5'>No users found.</td></tr>");
+            $("#usertable tbody").html(usersList);
         }
-    },
-     
-    
-    //  success: function(row) {
-    //     console.log(row);
-    //     if (row.players) {
-    //         var usersList="";
-    //         $.each(row.players,function(index, user){
-    //             usersList+=getuserrow(user);
-    //         });
-    //         $("#usertable tbody").html(usersList);
-    //     }
 
-    //  },
+     },
      error: function(xhr, status, error) {
          console.log("Error occurred:");
          console.log(xhr.responseText); // Log the full response for debugging
