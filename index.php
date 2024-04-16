@@ -9,6 +9,8 @@ require_once "partials/config.php";
     <?php include "include/form.php"?>
 
     <div class="container">
+        <!-- display deleted? message -->
+        <div class="displaymessage text-color-danger"></div>
         <!-- input search -->
         <div class="row my-3">
             <div class="col-10">
@@ -20,7 +22,7 @@ require_once "partials/config.php";
                 </div>
             </div>
             <div class="col-2">
-                <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#usermodal">Add new user</button>
+                <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#usermodal" id="adduserbtn">Add new user</button>
             </div>
         </div>
 
@@ -32,13 +34,13 @@ require_once "partials/config.php";
 
     <!-- pagination -->
     <nav aria-label="Page navigation example" id="pagination">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disable"><a class="page-link" href="#">Previous</a></li>
+      <!-- <ul class="pagination justify-content-center">
+        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
         <li class="page-item active"><a class="page-link" href="#">1</a></li>
         <li class="page-item"><a class="page-link" href="#">2</a></li>
         <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-      </ul>
+        <li class="page-item"><a class="page-link" href="#" >Next</a></li>
+      </ul> -->
     </nav>
 
     <input type="hidden" value="1" name="currentpage" id="currentpage">

@@ -8,6 +8,7 @@
       <div class="modal-body">
         <div class="container" id="profile">
             <h4>All user data will be displayed here</h4>
+            
 
         </div>
       </div>

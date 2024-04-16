@@ -28,9 +28,15 @@ if (!empty($action)) {
             'photo' => $imagename, // This should be the uploaded image filename
         ];
 
-        // Add user to database and get the inserted ID
-        $playerid = $obj->add($playerData);
-        // var_dump($playerid); // Check the type and value of $playerid
+        if($playerid){
+            $obj->update($playerData, $playerid);
+        }else{
+            // Add user to database and get the inserted ID
+            $playerid = $obj->add($playerData);
+            // var_dump($playerid); // Check the type and value of $playerid
+        }
+
+   
 
         if (!empty($playerid)) {
             // Fetch the inserted user record by ID
@@ -70,7 +76,42 @@ if (!empty($action)) {
         }
         $total = $obj->getCount();
         $useArr=['count'=>$total, 'users'=>$userlist];
-        echo json_encode($userlist);
+        echo json_encode($useArr);
+        exit();
+    }
+}
+
+
+//action to perform editing
+if($action == "editusersdata"){
+    $playerid = (!empty($_GET['id'])) ? $_GET['id'] : "";
+    if(!empty($playerid)){
+         // Fetch the inserted user record by ID
+         $user = $obj->getRow('id', $playerid);
+         // print_r($player); // Output the fetched user record for debugging
+         // Send the user data as JSON response
+         if (!empty($user)) {
+             header('Content-Type: application/json');
+             echo json_encode($user);
+             exit(); // Exit script after sending JSON response
+         } else {
+             echo json_encode(['error' => 'User not found']); // Handle case where user record is not found
+             exit();
+         }
+     } 
+}
+
+//action to perfrom deleting
+if($action=='deleteusersdata'){
+    $userid = (!empty($_GET['id'])) ? $_GET['id'] : "";
+    if(!empty($userid)){
+        $isdeleted=$obj->deleteRow($userid);
+        if($isdeleted){
+            $displaymessage = ['delete'=>1];
+        }else{
+            $displaymessage = ['delete'=>0];
+        }
+        echo json_encode($displaymessage);
         exit();
     }
 }
