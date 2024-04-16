@@ -129,35 +129,67 @@ class User extends database{
 
 
     // function to update
-    public function update($data, $id){
-        //dunamic data
-        if(!empty($data)){
-            $fields="";
-            $x=1;
-            $fieldsCount=Count($data);
-            foreach ($data as $field => $value) {
-                # code...
-                $fields.="{$field}=:{$field}";
-                if($x<$fieldsCount){
-                    $fields.=",";                
-                }
-                $x++;// to update
-            }
-        }
-        //staiic
-        $sql= "UPDATE {$this->tablename} SET {$fields} where id = :id";
-        $stmt = $this->conn->prepare($sql);
-        try{
-            $this->conn->beginTransaction();
-            $data['id']=$id;
-            $stmt->execute($data);
-            $this->conn->commit();//just saying this changes are done by me
+    // public function update($data, $id){
+    //     //dunamic data
+    //     if(!empty($data)){
+    //         $fields="";
+    //         $x=1;
+    //         $fieldsCount=count($data);
+    //         foreach ($data as $field => $value) {
+    //             # code...
+    //             $fields.="{$field}=:{$field}";
+    //             if($x<$fieldsCount){
+    //                 $fields.=",";                
+    //             }
+    //             $x++;// to update
+    //         }
+    //     }
+    //     //staiic
+    //     $sql= "UPDATE {$this->tablename} SET {$fields} where id = :id";
+    //     $stmt = $this->conn->prepare($sql);
+    //     try{
+    //         $this->conn->beginTransaction();
+    //         $data['id']=$id;
+    //         $stmt->execute($data);
+    //         $this->conn->commit();//just saying this changes are done by me
             
-        }catch(PDOException $e){
-            echo "Error:".$e->getMessage();
-            $this->conn->rollBack();
+    //     }catch(PDOException $e){
+    //         echo "Error:".$e->getMessage();
+    //         $this->conn->rollBack();
+    //     }
+    // }
+    public function update($data, $id){
+        if(!empty($data) && is_array($data)) {
+            $fields = "";
+            $x = 1;
+            $fieldsCount = count($data); // Use count() instead of Count()
+            
+            foreach ($data as $field => $value) {
+                $fields .= "{$field}=:{$field}";
+                if($x < $fieldsCount) {
+                    $fields .= ",";                
+                }
+                $x++;
+            }
+    
+            $sql = "UPDATE {$this->tablename} SET {$fields} WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            
+            try {
+                $this->conn->beginTransaction();
+                $data['id'] = $id;
+                $stmt->execute($data);
+                $this->conn->commit(); // Commit changes
+                
+            } catch(PDOException $e) {
+                echo "Error: " . $e->getMessage();
+                $this->conn->rollBack(); // Rollback changes on error
+            }
+        } else {
+            echo "Error: Invalid data format provided.";
         }
     }
+    
 
     //function to delete
     public function deleteRow($id){
@@ -173,6 +205,18 @@ class User extends database{
             return false; // Return false on exception (error occurred)
         }
     }
+
+
+    //function to search user
+
+    public function searchuser($searchText, $start = 0, $limit = 4){
+        $sql = "SELECT * FROM {$this->tablename} WHERE name LIKE :searchText ORDER BY id DESC LIMIT {$start}, {$limit}";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':searchText' => "{$searchText}%"]); // Correct parameter binding
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+    
     
 
 }

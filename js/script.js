@@ -106,7 +106,7 @@ $(document).ready(function() {
     // Adding users
     $(document).on("submit", "#addform", function(e) {
         e.preventDefault();
-
+        var msg = $("#userId").val().length > 0 ? "User has been updated successfully" : "New user has been added successfully";
         // AJAX request
         $.ajax({
             url: "include/ajax.php",
@@ -125,9 +125,10 @@ $(document).ready(function() {
                 if (response && response.id !== undefined) {
                     $("#usermodal").modal("hide"); // Close form modal
                     $("#addform")[0].reset(); // Reset form fields
+                    $(".displaymessage").html(msg).fadeIn().delay(1000).fadeOut();
                     getusers();
         
-                    console.log("User added successfully!");
+                    // console.log("User added successfully!");
                 } else {
                     console.log("Unexpected response format or data missing.");
                 }
@@ -157,7 +158,7 @@ $(document).ready(function() {
     //onclick event for editing
     $(document).on('click', "a.edituser", function(){
         var uid=$(this).data("id");
-        //console.log(uid);
+        console.log(uid);
         $.ajax({
             url: "include/ajax.php",
             type: "GET",
@@ -174,7 +175,7 @@ $(document).ready(function() {
                 $("#username").val(row.name);
                 $("#email").val(row.email);
                 $("#mobile").val(row.mobilenum);
-                $("#file").val(row.photo);
+                $("#file").val(row.photo['name']);
                 $("#userId").val(row.id);
                }
        
@@ -260,6 +261,74 @@ $(document).ready(function() {
             }
         })
     })
+
+    //keyup event for search data
+    // $(document).on("keyup", function(){
+    //     const searchText = $(this).val();
+    //     if(searchText.length>1){
+    //         $.ajax({
+    //             url: "include/ajax.php",
+    //             type: "GET",
+    //             dataType: "json", // Specify expected data type as JSON
+    //             data: {searchQuery:searchText,action:"searchuser"},
+    //             success: function(users){
+    //                 if(users){
+    //                     var userlist="";
+    //                     $.each(users,function(index,user){
+    //                     userlist+=getuserrow(user);
+    //                 });
+    //                     $("#usertable tbody").html(userlist);
+    //                     $("#pagination").hide();
+    //                 }
+                    
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.log("Error occurred:");
+    //                 console.log(xhr.responseText); // Log the full response for debugging
+    //                 console.log(status + ': ' + error);
+    //             },
+    //            });
+    //         }else{
+    //             getusers();
+    //             $("#pagination").show();
+    //         }
+                
+    
+    // })
+    $(document).on("keyup", "#searchinput", function(){
+        const searchText = $(this).val();
+        if(searchText.length > 1){
+            $.ajax({
+                url: "include/ajax.php",
+                type: "GET",
+                dataType: "json",
+                data: {searchQuery: searchText, action: "searchuser"},
+                success: function(users){
+                    if(users && users.length > 0){
+                        var userlist = "";
+                        $.each(users, function(index, user){
+                            userlist += getuserrow(user);
+                        });
+                        $("#usertable tbody").html(userlist);
+                        $("#pagination").hide();
+                    } else {
+                        $("#usertable tbody").html("<tr><td colspan='5'>No users found</td></tr>");
+                        $("#pagination").hide();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error occurred:");
+                    console.log(xhr.responseText);
+                    console.log(status + ': ' + error);
+                }
+            });
+        } else {
+            // If search text length is less than or equal to 1, show all users
+            getusers();
+            $("#pagination").show();
+        }
+    });
+    
 
 
 

@@ -10,7 +10,7 @@ require_once "partials/config.php";
 
     <div class="container">
         <!-- display deleted? message -->
-        <div class="displaymessage text-color-danger"></div>
+        <div class="displaymessage text-danger text-center bg-dark mb-3"></div>
         <!-- input search -->
         <div class="row my-3">
             <div class="col-10">
@@ -18,7 +18,7 @@ require_once "partials/config.php";
                     <div class="input-group-prepend">
                         <span class="input-group-text bg-dark"><i class="uil uil-search text-light"></i></span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Search user...">
+                    <input type="text" class="form-control" placeholder="Search user..." id="searchinput">
                 </div>
             </div>
             <div class="col-2">
