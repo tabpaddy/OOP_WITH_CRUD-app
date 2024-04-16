@@ -30,9 +30,9 @@
         <td>${user.email}</td>
         <td>${user.mobilenum}</td>
         <td>
-         <a href="#" class="me-3 profile"><i class="uil uil-eye text-info" title="View Profile" data-bs-target="#userviewmodal" data-bs-toggle="modal" data-id="${user.id}"></i></a>
-         <a href="#" class="me-3 edituser"><i class="uil uil-edit-alt text-success" title="Edit" data-bs-target="#usermodal" data-bs-toggle="modal" data-id="${user.id}"></i></a>
-         <a href="#" class="me-3 deleteuser"><i class="uil uil-trash text-danger" title="Delete" data-id="${user.id}"></i></a>
+         <a href="#" class="me-3 profile" data-id="${user.id}"><i class="uil uil-eye text-info" title="View Profile" data-bs-target="#userviewmodal" data-bs-toggle="modal"></i></a>
+         <a href="#" class="me-3 edituser" data-id="${user.id}"><i class="uil uil-edit-alt text-success" title="Edit" data-bs-target="#usermodal" data-bs-toggle="modal" ></i></a>
+         <a href="#" class="me-3 deleteuser" data-id="${user.id}"><i class="uil uil-trash text-danger" title="Delete" ></i></a>
         </td>
       </tr>`;
     }
@@ -154,9 +154,112 @@ $(document).ready(function() {
     })
 
 
+    //onclick event for editing
+    $(document).on('click', "a.edituser", function(){
+        var uid=$(this).data("id");
+        //console.log(uid);
+        $.ajax({
+            url: "include/ajax.php",
+            type: "GET",
+            dataType: "json", // Specify expected data type as JSON
+            data: {id:uid,action:'editusersdata'},
+       
+            beforeSend: function() {
+                console.log("Wait....Data is loading");
+            },
+            success: function(row) {
+               //console.log(row);
+               if(row){
+                //values in left side are from the input field and values from the right side are from the database
+                $("#username").val(row.name);
+                $("#email").val(row.email);
+                $("#mobile").val(row.mobilenum);
+                $("#file").val(row.photo);
+                $("#userId").val(row.id);
+               }
+       
+            },
+            error: function(xhr, status, error) {
+                console.log("Error occurred:");
+                console.log(xhr.responseText); // Log the full response for debugging
+                console.log(status + ': ' + error);
+            }
+           })
+    })
 
+    //onclick event foradding user btn
+    $(document).on("click", "#adduserbtn", function(){
+        $("#addform")[0].reset();
+        $("#userId").val("");
+    })
 
+    //onclick event for deleting
+    $(document).on("click", "a.deleteuser", function(e){
+        e.preventDefault();
+        var uid=$(this).data("id");
+        if(confirm("Are you sure you want to delete this user?")){
+            $.ajax({
+                url: "include/ajax.php",
+                type: "GET",
+                dataType: "json", // Specify expected data type as JSON
+                data: {id:uid,action:'deleteusersdata'},
+           
+                beforeSend: function() {
+                    console.log("Wait....Data is loading");
+                },
+                success: function(res) {
+                    if(res.delete==1){
+                        $(".displaymessage").html("user deleted successfully").fadeIn().delay(1000).fadeOut();
+                        getusers();
+                        console.log("done");
+                    }
+                    
+                 },
+                error: function(xhr, status, error) {
+                    console.log("Oops something went wrong!");
+                    console.log(xhr.responseText); // Log the full response for debugging
+                    console.log(status + ': ' + error);
+                }
+               })
+        }
 
+        
+    })
+
+    //onclick event for profile view
+    $(document).on("click", "a.profile", function(){
+        var uid=$(this).data("id");
+        $.ajax({
+            url: "include/ajax.php",
+            type: "GET",
+            dataType: "json", // Specify expected data type as JSON
+            data: {id:uid,action:'editusersdata'},
+       
+            success:function(user){
+                if(user){
+                    const profile=`<div class="row">
+                    <div class="col-sm-6 col-md-4">
+                      <img src="include/uploads/${user.photo}" alt="image" class="rounded" style="width: 70px; height: 70px; object-fit: contain;">
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                      <h4 class="test-primary">${user.name}</h4>
+                      <p>
+                        <i class="uil uil-at text-dark"></i>${user.email}
+                        <br>
+                        <i class="uil uil-phone text-dark"></i>${user.mobilenum}
+                      </p>
+                    </div>
+                  </div>`;
+                  $("#profile").html(profile);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Error occurred:");
+                console.log(xhr.responseText); // Log the full response for debugging
+                console.log(status + ': ' + error);
+            }
+        })
+    })
 
 
 

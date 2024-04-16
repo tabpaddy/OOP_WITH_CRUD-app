@@ -159,5 +159,21 @@ class User extends database{
         }
     }
 
+    //function to delete
+    public function deleteRow($id){
+        $sql = "DELETE FROM {$this->tablename} WHERE id=:id";
+        $stmt = $this->conn->prepare($sql);
+        try {
+            $stmt->execute([':id' => $id]); // Corrected to $stmt->execute([':id' => $id]);
+            if ($stmt->rowCount() > 0) {
+                return true; // Return true if deletion was successful
+            } 
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage(); // Output the error message
+            return false; // Return false on exception (error occurred)
+        }
+    }
+    
+
 }
 ?>
