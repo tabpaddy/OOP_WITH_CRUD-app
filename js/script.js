@@ -43,7 +43,7 @@
 
   function getusers(){
     // AJAX request
-    var pageno=$("#currentpage").val();
+    var pageno=$("#currentpage").val();//to get the current page
     $.ajax({
      url: "include/ajax.php",
      type: "GET",
@@ -53,22 +53,7 @@
      beforeSend: function() {
          console.log("Wait....Data is loading");
      },
-    //  success: function(row) {
-    //     console.log(row); // Log the response to inspect its structure
-        
-    //     if (Array.isArray(row) && row.length > 0) {
-    //         var usersList = "";
-    //         row.forEach(function(user) {
-    //             usersList += getuserrow(user);
-    //         });
-    //         $("#usertable tbody").html(usersList); // Update the table body with generated HTML
-    //         let totaluser=row.count;
-    //     } else {
-    //         console.log("No users found or invalid response format:", row);
-    //         // Display a message indicating no users were found
-    //         $("#usertable tbody").html("<tr><td colspan='5'>No users found.</td></tr>");
-    //     }
-    // },
+
      
     
      success: function(row) {
@@ -125,7 +110,7 @@ $(document).ready(function() {
                 if (response && response.id !== undefined) {
                     $("#usermodal").modal("hide"); // Close form modal
                     $("#addform")[0].reset(); // Reset form fields
-                    $(".displaymessage").html(msg).fadeIn().delay(1000).fadeOut();
+                    $(".displaymessage").html(msg).fadeIn().delay(2500).fadeOut();
                     getusers();
         
                     // console.log("User added successfully!");
@@ -175,7 +160,6 @@ $(document).ready(function() {
                 $("#username").val(row.name);
                 $("#email").val(row.email);
                 $("#mobile").val(row.mobilenum);
-                $("#file").val(row.photo['name']);
                 $("#userId").val(row.id);
                }
        
@@ -416,41 +400,3 @@ $(document).ready(function() {
 
 
 
-// $(document).ready(function (){
-//    // adding users
-//    $(document).on("submit","#addform",function(e){
-//     e.preventDefault();
-//     //ajax
-//     $.ajax({
-//         url: "include/ajax.php",
-//         type: "post",
-//         dataType: "json",
-//         data: new FormData(this),
-//         processData: false,
-//         contentType: false,
-//         beforeSend: function() {
-//             console.log("Wait....Data is loading");
-//         },
-//         success: function(response) {
-//             console.log(response); // Log the response to inspect user data
-//             // Example: Access user properties like mobilenum and photo
-//             // if (response && response.user) {
-//             //     console.log("Mobile Number:", response.user.mobilenum);
-//             //     console.log("Photo:", response.user.photo);
-               
-//             // }
-
-//             if (response) {
-//                 $("#usermodal").modal("hide");//to close form modal
-//                 $("#addform")[0].reset();//to reset all the values in the form
-//             }
-//         },
-//         error: function(xhr, status, error) {
-//             console.log("Error occurred:");
-//             console.log(xhr.responseText); // Log full response for debugging
-//             console.log(status + ': ' + error);
-//         }
-//     });
-    
-//    })
-// })
