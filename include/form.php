@@ -54,8 +54,8 @@
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-dark">Submit</button>
             <!-- 2ninput fields first for adding and next for updating, deleting or viewing profile -->
-            <input type="hidden" name="action" value="adduser">
-            <input type="hidden" name="userId" id="userId" value="">
+            <input type="hidden" name="action" value="adduser"> <!-- this for the action when adding the user -->
+            <input type="hidden" name="userId" id="userId" value="">  <!-- for updating deleting and viewing -->
         </div>
         </form>
         </div>
