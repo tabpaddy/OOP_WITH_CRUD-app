@@ -55,7 +55,7 @@
             <button type="submit" class="btn btn-dark">Submit</button>
             <!-- 2ninput fields first for adding and next for updating, deleting or viewing profile -->
             <input type="hidden" name="action" value="adduser">
-            <input type="hidden" name="userId" id="userId">
+            <input type="hidden" name="userId" id="userId" value="">
         </div>
         </form>
         </div>

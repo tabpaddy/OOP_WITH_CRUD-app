@@ -21,12 +21,21 @@ if (!empty($action)) {
         }
 
         // Prepare user data for insertion
+        // $playerData = [
+        //     'name' => $name,
+        //     'email' => $email,
+        //     'mobilenum' => $mobile,
+        //     'photo' => $imagename, // This should be the uploaded image filename
+        // ];
         $playerData = [
             'name' => $name,
             'email' => $email,
-            'mobilenum' => $mobile,
-            'photo' => $imagename, // This should be the uploaded image filename
+            'mobilenum' => $mobile
         ];
+    
+        if (!empty($imagename)) {
+            $playerData['photo'] = $imagename; // Include photo field only if imagename is not empty and This should be the uploaded image filename
+        }
 
         if($playerid){
             $obj->update($playerData, $playerid);
@@ -52,7 +61,7 @@ if (!empty($action)) {
                 exit();
             }
         } else {
-            echo json_encode(['error' => 'Failed to add user']); // Handle case where user addition fails
+            echo json_encode(['error' => 'Failed to perform user operation']); // Handle case where user addition fails
             exit();
         }
     }
@@ -114,6 +123,15 @@ if($action=='deleteusersdata'){
         echo json_encode($displaymessage);
         exit();
     }
+}
+
+
+//search data
+if($action == 'searchuser'){
+    $queryStarting = !empty($_GET['searchQuery']) ? trim($_GET['searchQuery']) : '';
+    $results = $obj->searchuser($queryStarting);
+    echo json_encode($results);
+    exit();
 }
 
 
