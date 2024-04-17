@@ -9,7 +9,7 @@ class User extends database{
     
     // function to add users
     public function add($data){
-        if (!empty($data)) {
+        if (!empty($data)) {//to check data is not empty
             $fields = $placeholder = [];
             foreach ($data as $field => $value) {
                 $fields[]=$field;
@@ -39,8 +39,8 @@ class User extends database{
         $sql = "SELECT * FROM {$this->tablename} ORDER BY id DESC LIMIT {$start},{$limit}";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        if ($stmt -> rowCount()>0) {
-            $results = $stmt->fetchAll(PDO:: FETCH_ASSOC);
+        if ($stmt -> rowCount()>0) {//it means i have data inside the database so i'm going to fetch all the data in the db using  fetchAll(PDO:: FETCH_ASSOC) 
+            $results = $stmt->fetchAll(PDO:: FETCH_ASSOC);//to get all associative value and using fetchAll method to access all the data nd display in the website
         }else {
             $results=[];
         }
@@ -52,6 +52,7 @@ class User extends database{
 
 
     // function to get single rows
+    //this is using for updating, viewing, deleting because we are getting a single user
     public function getRow($field, $value) {
         // Prepare the SQL statement with a named placeholder for the field value
         $sql = "SELECT * FROM {$this->tablename} WHERE {$field} = :value";
@@ -93,6 +94,7 @@ class User extends database{
 
 
     //function to count number of rows
+    //to count how many data is inside the database 
 
     public function getCount(){
         $sql = "SELECT count(*) as pcount FROM {$this->tablename}";
